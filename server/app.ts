@@ -56,7 +56,6 @@ io.on('connection', socket => {
 
 		if (key === 'valve_bar' && typeof value !== 'boolean') {
 			valve_bar = Math.round(value * 1000)
-			console.log('special', valve_bar)
 			return
 		}
 
@@ -85,11 +84,11 @@ async function read_bar() {
 		)
 
 		const text = await tesseract.recognize('image.png', { lang: 'rus' })
-		const number = parseFloat(text.replace(',', '.'))
+		const pressure = parseFloat(text.replace(',', '.'))
 
-		console.log(number)
+		io.emit('pressure', pressure / 1000)
 
-		if (number >= valve_bar && state.valve_active === false) {
+		if (pressure >= valve_bar && state.valve_active === false) {
 			const command = 'valve_active:true'
 			console.log('command', command)
 			serialPort.write(command, err => {

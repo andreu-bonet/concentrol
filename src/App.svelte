@@ -3,7 +3,8 @@
 
 	const socket = io()
 
-	let state = null
+	let state = {}
+	let pressure = 0
 
 	function emit(key) {
 		socket.emit('control', { key, value: state[key] })
@@ -12,12 +13,33 @@
 	socket.on('state', new_state => {
 		state = new_state
 	})
+
+	socket.on('pressure', new_pressure => {
+		pressure = new_pressure
+	})
 </script>
 
 {#if state}
 	<div class="w-full justify-center flex m-4">
 		<div class="flex flex-col space-y-4">
 			<h1 class="text-2xl text-center">Control Panel</h1>
+			<div
+				class="flex items-center justify-between p-2 border rounded-md bg-gray-50"
+			>
+				<label class="inline-flex relative items-center mr-5 cursor-pointer">
+					<input
+						type="checkbox"
+						value=""
+						class="sr-only peer"
+						bind:checked={state.led_active}
+						on:change={() => emit('led_active')}
+					/>
+					<div
+						class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"
+					/>
+					<span class="ml-3 text-sm font-medium">LED</span>
+				</label>
+			</div>
 			<div
 				class="flex items-center justify-between p-2 border rounded-md bg-gray-50"
 			>
@@ -99,7 +121,7 @@
 				<div class="wrapper bg-white border rounded-md">
 					<input
 						type="text"
-						class="w-12 text-center"
+						class="w-16 text-center"
 						bind:value={state.valve_bar}
 					/>
 					<span class="mr-2">Bar</span>
@@ -111,19 +133,16 @@
 			<div
 				class="flex items-center justify-between p-2 border rounded-md bg-gray-50"
 			>
-				<label class="inline-flex relative items-center mr-5 cursor-pointer">
+				<span class="ml-3 text-sm font-medium">PRESSURE</span>
+				<div class="wrapper bg-white border rounded-md">
 					<input
-						type="checkbox"
-						value=""
-						class="sr-only peer"
-						bind:checked={state.led_active}
-						on:change={() => emit('led_active')}
+						type="text"
+						class="w-32 text-center my-2 bg-white"
+						disabled
+						bind:value={pressure}
 					/>
-					<div
-						class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"
-					/>
-					<span class="ml-3 text-sm font-medium">LED</span>
-				</label>
+					<span class="mr-4">Bar</span>
+				</div>
 			</div>
 		</div>
 	</div>
