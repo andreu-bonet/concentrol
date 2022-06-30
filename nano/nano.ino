@@ -17,7 +17,7 @@ void setup()
 	digitalWrite(PUMP_1_POWER, HIGH);
 
 	pinMode(PUMP_1_FLOW, OUTPUT);
-	analogWrite(PUMP_1_FLOW, 51);
+	analogWrite(PUMP_1_FLOW, 0);
 
 	pinMode(PUMP_1_SEC, OUTPUT);
 	digitalWrite(PUMP_1_SEC, HIGH);
@@ -26,7 +26,7 @@ void setup()
 	digitalWrite(PUMP_2_POWER, HIGH);
 
 	pinMode(PUMP_2_FLOW, OUTPUT);
-	analogWrite(PUMP_2_FLOW, 51);
+	analogWrite(PUMP_2_FLOW, 0);
 
 	pinMode(PUMP_2_SEC, OUTPUT);
 	digitalWrite(PUMP_2_SEC, HIGH);

@@ -13,9 +13,9 @@ const io = new Server(server)
 
 const state: Record<string, number | boolean> = {
 	pump_1_active: false,
-	pump_1_flow: 1,
+	pump_1_flow: 0,
 	pump_2_active: false,
-	pump_2_flow: 1,
+	pump_2_flow: 0,
 	valve_active: false,
 	valve_bar: 10,
 	led_active: false,
@@ -23,10 +23,10 @@ const state: Record<string, number | boolean> = {
 
 let valve_bar = 10000
 
-function parse_pump_flow(value: number) {
+function parse_pump_flow(value: number, max: number) {
 	if (value < 0) value = 0
-	if (value > 5) value = 5
-	return Math.floor((value * 255) / 5)
+	if (value > max) value = max
+	return Math.floor((value * 255) / max)
 }
 
 const serialPort = new SerialPort({
@@ -50,16 +50,18 @@ io.on('connection', socket => {
 		state[key] = value
 		io.emit('state', state)
 
-		if (key.match(/pump_\d_flow/) && typeof value !== 'boolean') {
-			value = parse_pump_flow(value)
+		if (typeof value !== 'boolean') {
+			if (key === 'pump_1_flow') {
+				value = parse_pump_flow(value, 4.768)
+			} else if (key === 'pump_2_flow') {
+				value = parse_pump_flow(value, 4.722)
+			} else if (key === 'valve_bar') {
+				valve_bar = Math.round(value * 1000)
+				return
+			}
 		}
 
-		if (key === 'valve_bar' && typeof value !== 'boolean') {
-			valve_bar = Math.round(value * 1000)
-			return
-		}
-
-		const command = `${key}:${value}`
+		const command = `${key}:${value}\n`
 		console.log('command', command)
 
 		serialPort.write(command, err => {
@@ -89,7 +91,7 @@ async function read_bar() {
 		io.emit('pressure', pressure / 1000)
 
 		if (pressure >= valve_bar && state.valve_active === false) {
-			const command = 'valve_active:true'
+			const command = 'valve_active:true\n'
 			console.log('command', command)
 			serialPort.write(command, err => {
 				if (err) {
