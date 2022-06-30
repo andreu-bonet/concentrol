@@ -3,7 +3,7 @@
 
 	const socket = io()
 
-	let state = {}
+	let state = null
 	let pressure = 0
 
 	function emit(key) {
