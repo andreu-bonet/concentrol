@@ -4,7 +4,7 @@
 	const socket = io()
 
 	let state = null
-	let pressure = 0
+	let pressure = 'unknown'
 
 	function emit(key) {
 		socket.emit('control', { key, value: state[key] })
@@ -15,7 +15,7 @@
 	})
 
 	socket.on('pressure', new_pressure => {
-		pressure = new_pressure
+		pressure = typeof new_pressure === 'number' ? new_pressure : 'unknown'
 	})
 </script>
 
