@@ -114,7 +114,7 @@ async function read_bar() {
 	}
 }
 
-setInterval(() => read_bar(), 1000)
+setInterval(() => read_bar(), 500)
 
 server.listen(config.get('port'), () =>
 	console.log(`Runing on port ${config.get('port')}`)
