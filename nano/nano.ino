@@ -59,11 +59,11 @@ void loop()
 			int value = command.substring(index + 1, length).toInt();
 			analogWrite(PUMP_1_FLOW, value);
 		}
-		else if (command == "pump_1_active:true")
+		else if (command == "pump_2_active:true")
 		{
 			digitalWrite(PUMP_2_POWER, LOW);
 		}
-		else if (command == "pump_1_active:false")
+		else if (command == "pump_2_active:false")
 		{
 			digitalWrite(PUMP_2_POWER, HIGH);
 		}
