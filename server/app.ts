@@ -47,6 +47,14 @@ io.on('connection', socket => {
 			value = parseFloat(value.replace(',', '.'))
 		}
 
+		if (typeof value !== 'boolean') {
+			if (key === 'pump_1_flow') {
+				value = value > 4.768 ? 4.768 : value < 0 ? 0 : value
+			} else if (key === 'pump_2_flow') {
+				value = value > 4.722 ? 4.722 : value < 0 ? 0 : value
+			}
+		}
+
 		state[key] = value
 		io.emit('state', state)
 

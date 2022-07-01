@@ -59,7 +59,7 @@
 				<div class="wrapper bg-white border rounded-md">
 					<input
 						type="text"
-						class="w-10 text-center"
+						class="w-16 text-center"
 						bind:value={state.pump_1_flow}
 					/>
 					<span class="mr-2">ml/min</span>
@@ -90,7 +90,7 @@
 				<div class="wrapper bg-white border rounded-md">
 					<input
 						type="text"
-						class="w-10 text-center"
+						class="w-16 text-center"
 						bind:value={state.pump_2_flow}
 					/>
 					<span class="mr-2">ml/min</span>
